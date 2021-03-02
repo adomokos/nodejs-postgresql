@@ -12,6 +12,21 @@ async function getWorkedHoursForUser(userId) {
   return data;
 }
 
+async function create(userId, workedHour) {
+  const result = await db.query(
+    'INSERT INTO worked_hours(user_id, date, hours) VALUES ($1, $2, $3) RETURNING *'
+    ,[userId, workedHour.date, workedHour.hours]
+  );
+  let message = 'Error in creating quote';
+
+  if (result.length) {
+    message = 'Worked hour created successfully';
+  }
+
+  return {message};
+}
+
 module.exports = {
-  getWorkedHoursForUser
+  getWorkedHoursForUser,
+  create
 }
